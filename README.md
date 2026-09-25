@@ -18,5 +18,5 @@ A lightweight KDE Plasma 6 plasmoid for playing videos directly on the desktop.
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/kde-video-frame.git
+git clone https://github.com/arcoiesc/kde-video-frame.git
 cd kde-video-frame

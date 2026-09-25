@@ -1,0 +1,19 @@
+{
+    "KPlugin": {
+        "Id": "com.ash.videoframe",
+        "Name": "Video Frame",
+        "Description": "A looping video frame for KDE Plasma",
+        "Version": "1.0",
+        "License": "GPL-3.0",
+        "Category": "Multimedia",
+        "Icon": "video-x-generic",
+        "Authors": [
+            {
+                "Name": "Ash"
+            }
+        ]
+    },
+    "KPackageStructure": "Plasma/Applet",
+    "X-Plasma-API": "declarative",
+    "X-Plasma-API-Minimum-Version": "6.0"
+}

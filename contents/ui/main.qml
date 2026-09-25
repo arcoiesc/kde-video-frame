@@ -49,6 +49,17 @@ PlasmoidItem {
         }
     }
 
+MediaDevices {
+    id: mediaDevices
+
+    onDefaultAudioOutputChanged: {
+        audioOutput.device = mediaDevices.defaultAudioOutput
+        console.log("Audio device changed to:", mediaDevices.defaultAudioOutput.description)
+    }
+}
+
+
+
     MediaPlayer {
         id: player
 
@@ -59,6 +70,10 @@ PlasmoidItem {
         audioOutput: AudioOutput {
             id: audioOutput
 
+
+            device: mediaDevices.defaultAudioOutput
+
+            
             volume: plasmoid.configuration.audioEnabled
                     ? plasmoid.configuration.volume / 100
                     : 0.0

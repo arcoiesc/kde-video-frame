@@ -1,4 +1,4 @@
-# KDE Video Frame
+# KDE Video Frame #Widget #Plasmoid
 
 A lightweight KDE Plasma 6 plasmoid for playing videos directly on the desktop.
 

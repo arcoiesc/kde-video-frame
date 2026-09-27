@@ -10,9 +10,11 @@ Kirigami.FormLayout {
     property alias cfg_videoPath: videoPath.text
     property alias cfg_loopVideo: loopVideo.checked
     property alias cfg_audioEnabled: audioEnabled.checked
-    property alias cfg_showFrame: showFrame.checked
+//    property alias cfg_showFrame: showFrame.checked
     property alias cfg_rotation: rotation.currentIndex
     property alias cfg_volume: volume.value
+    property alias cfg_opacity: opacity.value
+//    property alias cfg_cornerRadius: cornerRadius.value
 
     RowLayout {
         Kirigami.FormData.label: i18n("Video:")
@@ -61,10 +63,53 @@ Kirigami.FormLayout {
         }
     }
 
+RowLayout {
+    Kirigami.FormData.label: i18n("Opacity:")
+
+    QQC2.Slider {
+        id: opacity
+        from: 0
+        to: 100
+        stepSize: 1
+        value: 100
+        Layout.fillWidth: true
+    }
+
+    QQC2.Label {
+        text: Math.round(opacity.value) + "%"
+        Layout.preferredWidth: 45
+    }
+}
+/*
+RowLayout {
+    Kirigami.FormData.label: i18n("Corners:")
+
+    QQC2.Slider {
+        id: cornerRadius
+        from: 0
+        to: 50
+        stepSize: 1
+        value: 18
+        Layout.fillWidth: true
+    }
+
+    QQC2.Label {
+        text: Math.round(cornerRadius.value) + " px"
+        Layout.preferredWidth: 45
+    }
+}
+*/
+
+
+
+
+
+/*
     QQC2.CheckBox {
         id: showFrame
         text: i18n("Show frame")
     }
+*/
 
     QQC2.ComboBox {
         id: rotation

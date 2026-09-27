@@ -1,5 +1,6 @@
 import QtQuick
 import QtMultimedia
+import QtQuick.Effects
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core 2.0 as PlasmaCore
 
@@ -12,68 +13,65 @@ PlasmoidItem {
     Plasmoid.backgroundHints: PlasmaCore.Types.NoBackground
 
     Rectangle {
-        id: frame
+    id: frame
 
-        anchors.fill: parent
+    anchors.fill: parent
+    color: "transparent"
 
-        color: "black"
+    Item {
+        id: videoSource
 
-        radius: plasmoid.configuration.showFrame ? 18 : 0
+        anchors.centerIn: parent
 
-        border.width: plasmoid.configuration.showFrame ? 2 : 0
+        width: (plasmoid.configuration.rotation % 2 === 0)
+               ? parent.width
+               : parent.height
 
-        clip: true
+        height: (plasmoid.configuration.rotation % 2 === 0)
+                ? parent.height
+                : parent.width
 
-        Item {
-            id: videoContainer
+        rotation: plasmoid.configuration.rotation * 90
 
-            anchors.centerIn: parent
+        // Keep opacity working
+        opacity: plasmoid.configuration.opacity / 100.0
 
-            width: (plasmoid.configuration.rotation % 2 === 0)
-                   ? parent.width
-                   : parent.height
+        // Render this item into a texture for MultiEffect
+        layer.enabled: true
 
-            height: (plasmoid.configuration.rotation % 2 === 0)
-                    ? parent.height
-                    : parent.width
+        VideoOutput {
+            id: videoOutput
 
-            rotation: plasmoid.configuration.rotation * 90
+            anchors.fill: parent
 
-            VideoOutput {
-                id: videoOutput
-
-                anchors.fill: parent
-
-                fillMode: VideoOutput.PreserveAspectCrop
-            }
+            fillMode: VideoOutput.PreserveAspectCrop
         }
-    }
-
-MediaDevices {
-    id: mediaDevices
-
-    onDefaultAudioOutputChanged: {
-        audioOutput.device = mediaDevices.defaultAudioOutput
-        console.log("Audio device changed to:", mediaDevices.defaultAudioOutput.description)
     }
 }
 
+    MediaDevices {
+        id: mediaDevices
 
+        onDefaultAudioOutputChanged: {
+            audioOutput.device = mediaDevices.defaultAudioOutput
+            console.log(
+                "Audio device changed to:",
+                mediaDevices.defaultAudioOutput.description
+            )
+        }
+    }
 
     MediaPlayer {
         id: player
 
         videoOutput: videoOutput
-
         source: plasmoid.configuration.videoPath
 
         audioOutput: AudioOutput {
             id: audioOutput
 
-
             device: mediaDevices.defaultAudioOutput
 
-            
             volume: plasmoid.configuration.audioEnabled
                     ? plasmoid.configuration.volume / 100
                     : 0.0
@@ -83,8 +81,6 @@ MediaDevices {
                ? MediaPlayer.Infinite
                : 1
 
-        // Keep playing even when the desktop widget
-        // is covered by another application.
         onSourceChanged: {
             if (source.toString() !== "") {
                 play()

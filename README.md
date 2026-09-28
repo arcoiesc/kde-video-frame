@@ -9,7 +9,7 @@ A lightweight KDE Plasma 6 plasmoid for playing videos directly on the desktop.
 - Audio toggle
 - Volume control
 - Video rotation (0°, 90°, 180°, 270°)
-- Optional video frame
+- Variable opacity 
 - Transparent widget background
 - Qt Multimedia / FFmpeg playback
 

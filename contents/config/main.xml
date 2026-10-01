@@ -12,6 +12,10 @@
             <default></default>
         </entry>
 
+        <entry name="folderPath" type="String">
+            <default></default>
+        </entry>
+
         <entry name="loopVideo" type="Bool">
             <default>true</default>
         </entry>

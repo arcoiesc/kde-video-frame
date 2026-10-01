@@ -8,6 +8,7 @@ Kirigami.FormLayout {
     id: page
 
     property alias cfg_videoPath: videoPath.text
+    property alias cfg_folderPath: folderPath.text
     property alias cfg_loopVideo: loopVideo.checked
     property alias cfg_audioEnabled: audioEnabled.checked
 //    property alias cfg_showFrame: showFrame.checked
@@ -17,21 +18,43 @@ Kirigami.FormLayout {
 //    property alias cfg_cornerRadius: cornerRadius.value
 
     RowLayout {
-        Kirigami.FormData.label: i18n("Video:")
+    Kirigami.FormData.label: i18n("Video:")
+
+    QQC2.TextField {
+        id: videoPath
+        Layout.fillWidth: true
+        readOnly: true
+        placeholderText: i18n("No video selected")
+    }
+
+    QQC2.Button {
+        text: i18n("Select Video")
+        icon.name: "video-x-generic"
+        onClicked: fileDialog.open()
+    }
+
+    QQC2.Button {
+        text: i18n("Select Folder")
+        icon.name: "folder-open"
+        onClicked: folderDialog.open()
+    }
+}
+
+
+
+    RowLayout {
+        Kirigami.FormData.label: i18n("Folder:")
 
         QQC2.TextField {
-            id: videoPath
+            id: folderPath
             Layout.fillWidth: true
             readOnly: true
-            placeholderText: i18n("No video selected")
-        }
-
-        QQC2.Button {
-            text: i18n("Browse…")
-            icon.name: "document-open"
-            onClicked: fileDialog.open()
+            placeholderText: i18n("No folder selected")
         }
     }
+
+
+
 
     QQC2.CheckBox {
         id: loopVideo
@@ -136,6 +159,20 @@ RowLayout {
 
         onAccepted: {
             videoPath.text = selectedFile.toString()
+            folderPath.text = ""
+        }
+
+    FolderDialog {
+        id: folderDialog
+
+        title: i18n("Select a video folder")
+
+        onAccepted: {
+            folderPath.text = selectedFolder.toString()
+            videoPath.text = ""
         }
     }
+
+    }
+
 }

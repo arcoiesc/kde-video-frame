@@ -1,3 +1,5 @@
+
+import Qt.labs.folderlistmodel
 import QtQuick
 import QtMultimedia
 import QtQuick.Effects
@@ -49,6 +51,26 @@ PlasmoidItem {
     }
 }
 
+    property int folderIndex: 0
+
+    FolderListModel {
+        id: folderModel
+
+        folder: plasmoid.configuration.folderPath
+
+        nameFilters: [
+            "*.mp4",
+            "*.webm",
+            "*.mkv",
+            "*.avi",
+            "*.mov",
+            "*.m4v"
+    ]
+
+        showDirs: false
+        showFiles: true
+    }
+
     MediaDevices {
         id: mediaDevices
 
@@ -65,7 +87,11 @@ PlasmoidItem {
         id: player
 
         videoOutput: videoOutput
-        source: plasmoid.configuration.videoPath
+        source: plasmoid.configuration.folderPath !== ""
+            ? (folderModel.count > 0
+                ? folderModel.get(folderIndex, "fileUrl")
+                : "")
+            : plasmoid.configuration.videoPath
 
         audioOutput: AudioOutput {
             id: audioOutput
@@ -77,13 +103,33 @@ PlasmoidItem {
                     : 0.0
         }
 
-        loops: plasmoid.configuration.loopVideo
-               ? MediaPlayer.Infinite
-               : 1
+
+        loops: plasmoid.configuration.folderPath !== ""
+                ? 1
+                : (plasmoid.configuration.loopVideo
+                   ? MediaPlayer.Infinite
+                   : 1)
 
         onSourceChanged: {
             if (source.toString() !== "") {
                 play()
+            }
+        }
+
+        onMediaStatusChanged: {
+            if (mediaStatus === MediaPlayer.EndOfMedia &&
+                plasmoid.configuration.folderPath !== "") {
+
+                if (folderModel.count === 0)
+                    return
+
+                if (folderIndex + 1 < folderModel.count) {
+                    folderIndex++
+                } else if (plasmoid.configuration.loopVideo) {
+                    folderIndex = 0
+                } else {
+                    return
+                }
             }
         }
 

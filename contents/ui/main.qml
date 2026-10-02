@@ -1,4 +1,5 @@
 
+import QtQuick.Controls as QQC2
 import Qt.labs.folderlistmodel
 import QtQuick
 import QtMultimedia
@@ -50,6 +51,118 @@ PlasmoidItem {
         }
     }
 }
+
+    MouseArea {
+        id: videoMouseArea
+
+        anchors.fill: parent
+        hoverEnabled: true
+
+        acceptedButtons: Qt.NoButton
+
+        Rectangle {
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+
+            width: 42
+            height: 70
+
+            radius: 12
+
+            color: "black"
+            opacity: videoMouseArea.containsMouse &&
+                    plasmoid.configuration.folderPath !== ""
+                    ? 0.55
+                    : 0.0
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 180
+                }
+            }
+
+            QQC2.Button {
+                anchors.fill: parent
+
+                text: "‹"
+
+                enabled: folderModel.count > 0
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                contentItem: Text {
+                    text: parent.text
+                    color: "white"
+                    font.pixelSize: 34
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                onClicked: {
+                    if (folderIndex > 0) {
+                        folderIndex--
+                    } else if (plasmoid.configuration.loopVideo &&
+                            folderModel.count > 0) {
+                        folderIndex = folderModel.count - 1
+                    }
+                }
+            }
+        }
+
+        Rectangle {
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+
+            width: 42
+            height: 70
+
+            radius: 12
+
+            color: "black"
+            opacity: videoMouseArea.containsMouse &&
+                    plasmoid.configuration.folderPath !== ""
+                    ? 0.55
+                    : 0.0
+
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 180
+                }
+            }
+
+            QQC2.Button {
+                anchors.fill: parent
+
+                text: "›"
+
+                enabled: folderModel.count > 0
+
+                background: Rectangle {
+                    color: "transparent"
+                }
+
+                contentItem: Text {
+                    text: parent.text
+                    color: "white"
+                    font.pixelSize: 34
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                onClicked: {
+                    if (folderIndex + 1 < folderModel.count) {
+                        folderIndex++
+                    } else if (plasmoid.configuration.loopVideo &&
+                            folderModel.count > 0) {
+                        folderIndex = 0
+                    }
+                }
+            }
+        }
+    }
+
 
     property int folderIndex: 0
 
